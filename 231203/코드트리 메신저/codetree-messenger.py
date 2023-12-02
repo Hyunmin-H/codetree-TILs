@@ -1,3 +1,5 @@
+import sys
+
 def make_tree_and_authorities(node_info):
     tree = {i:[None] for i in range(N+1)}
     for n in range(1, N+1):
@@ -47,6 +49,29 @@ def print_numChats(n, depth):
         calc_numChats(nn, depth+1)
     print(answer)
 
+def print_numChats2(n):
+    from collections import deque
+    global answer
+
+    visited = [False for _ in range(N+1)]
+
+    q = deque([])
+    q.append([n,0])
+
+    while q :
+        nn, depth = q.pop()
+        if not alarms[nn]:
+            continue
+        if authorities[nn] >= depth :
+            answer += 1
+        for nnn in tree[nn][1:]:
+            if not visited[nnn] :
+                q.append([nnn, depth+1])
+                visited[nnn] = True
+
+    answer -= 1 ## 첫번째 Node
+    print(answer)
+
 
 
 
@@ -66,7 +91,7 @@ for qs in range(Q-1) :
     elif q[0] == 400 :
         change_nodes(q[1], q[2])
     elif q[0] == 500 :
-        print_numChats(q[1], 0)
+        print_numChats2(q[1])
         answer = 0
     # if qs == 4 :
     #     break
