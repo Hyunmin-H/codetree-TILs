@@ -1,10 +1,7 @@
-# import sys
-
 def make_tree_and_authorities(node_info):
-    tree = {}
-    tree[0] = [None]
+    tree = {i:[None] for i in range(N+1)}
     for n in range(1, N+1):
-        tree[n] = [node_info[n]]
+        tree[n][0] = node_info[n]
         tree[node_info[n]].append(n)
 
     authorities=[None]
@@ -53,11 +50,6 @@ def print_numChats(n, depth):
 
 
 
-# sys.stdin = open("/Users/hanhyunmin/PycharmProjects/pythonProject/코드트리메신저/input.txt", "r")
-# T = int(input())
-
-# 여러개의 테스트 케이스가 주어지므로, 각각을 처리합니다.
-# for test_case in range(1, T + 1):
 
 N, Q = map(int, input().split())
 node_info = list(map(int, input().split()))
