@@ -56,8 +56,8 @@ def print_numChats2(n):
     visited = [False for _ in range(N+1)]
 
     q = deque([])
-    q.append([n,0])
-
+    for i in range(len(tree[n])-1):
+        q.append([tree[n][i+1], 1])
     while q :
         nn, depth = q.pop()
         if not alarms[nn]:
@@ -69,9 +69,7 @@ def print_numChats2(n):
                 q.append([nnn, depth+1])
                 visited[nnn] = True
 
-    answer -= 1 ## 첫번째 Node
     print(answer)
-
 
 
 
