@@ -116,7 +116,6 @@ def select_defenser(area, a_i, a_j):
         if min_j > j :
             min_j = j
             min_j_ij = [(i, j)]
-    print('min_j_ij', min_j_ij)
     return min_j_ij[0]
 
 def attack_laser(i, j, d_i, d_j, route, v):
@@ -136,6 +135,31 @@ def attack_laser(i, j, d_i, d_j, route, v):
             v_ = [vv[:] for vv in v]
             route_ = [r[:] for r in route]
             attack_laser(ii, jj, d_i, d_j, route_, v_)
+
+def attack_laser2(i, j, d_i, d_j):
+    q = deque([(i, j, [(i, j)])])
+
+    while q:
+        ii, jj, route = q.pop()
+
+        for n in range(4):
+            iii = (ii + dy[n])%4
+            jjj = (jj + dx[n])%4
+
+            if area[iii][jjj] == 0 :
+                continue
+            if (iii, jjj) == (d_i, d_j):
+                routes_final.append(route)
+                break
+
+            if not (iii, jjj) in route:
+
+                route_ = [r[:] for r in route]
+                route_.append((iii, jjj))
+                q.append((iii, jjj, route_))
+
+    print(routes_final)
+
 
 def choose_min_route(routes):
     min_value = 1e+9
@@ -185,8 +209,11 @@ def get_energy(a_i, a_j, d_i, d_j, route):
             area[i][j] += 1
 
 
-dy = [0, 1, 0, -1]
-dx = [1, 0, -1, 0]
+# dy = [0, 1, 0, -1]
+# dx = [1, 0, -1, 0]
+dy = [-1, 0, 1, 0]
+dx = [0, -1, 0, 1]
+
 
 N, M, K = map(int, input().split())
 area = [list(map(int, input().split())) for _ in range(N)]
@@ -202,7 +229,8 @@ for k in range(K):
     v = [[False for _ in range(M)] for _ in range(N)]
     v[a_i][a_j] = True
     routes_final = []
-    attack_laser(a_i, a_j, d_i, d_j, [], v)
+    # attack_laser(a_i, a_j, d_i, d_j, [], v)
+    attack_laser2(a_i, a_j, d_i, d_j)
 
     if len(routes_final) == 0 :
         route_final = attack_poktan(a_i, a_j, d_i, d_j, area[a_i][a_j])
