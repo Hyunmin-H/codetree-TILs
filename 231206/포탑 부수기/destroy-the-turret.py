@@ -85,17 +85,23 @@ def select_defenser(area, a_i, a_j):
             return max_ijs[0]
 
     in_attacker= []
+    in_attacker_set=set([])
+
+    print('attacker_list', attacker_list)
     for i in range(len(attacker_list)):
         if attacker_list[i] in max_ijs :
             in_attacker.append(attacker_list[i])
-    if len(in_attacker) == len(max_ijs):
+            in_attacker_set.add(attacker_list[i])
+    print('in_attacker', in_attacker)
+    print('max_ijs', max_ijs)
+    if len(in_attacker_set) == len(max_ijs):
         return in_attacker[0]
     else :
         for in_attack in in_attacker:
-
             if in_attack in max_ijs:
                 max_ijs.remove(in_attack)
 
+    print('after max_ijs', max_ijs)
     min_sum = 1e+9
     min_sum_ijs = []
     for i, j in max_ijs :
@@ -110,11 +116,11 @@ def select_defenser(area, a_i, a_j):
 
     min_j = 1e+9
     min_j_ij = []
-    for i, j in min_j_ij :
+    for i, j in min_sum_ijs :
         if min_j > j :
             min_j = j
             min_j_ij = [(i, j)]
-
+    print('min_j_ij', min_j_ij)
     return min_j_ij[0]
 
 def attack_laser(i, j, d_i, d_j, route, v):
@@ -181,12 +187,12 @@ def get_energy(a_i, a_j, d_i, d_j, route):
 dy = [0, 1, 0, -1]
 dx = [1, 0, -1, 0]
 
-
-
 N, M, K = map(int, input().split())
 area = [list(map(int, input().split())) for _ in range(N)]
 attacker_list = []
 
+if test_case != 4:
+    continue
 for k in range(K):
     if is_end(area) :
         break
