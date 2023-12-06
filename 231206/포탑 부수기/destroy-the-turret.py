@@ -151,7 +151,7 @@ def choose_min_route(routes):
 def damage_route(route, damage):
     for r in route :
         i, j = r
-        area[i][j] -= damage//2
+        area[i][j] = max(0, area[i][j] - damage//2)
 
 def attack_poktan(a_i, a_j, d_i, d_j, damage):
     dyy = [-1, -1, 0, 1, 1, 1, 0, -1]
