@@ -92,7 +92,9 @@ def select_defenser(area, a_i, a_j):
         return in_attacker[0]
     else :
         for in_attack in in_attacker:
-            max_ijs.remove(in_attack)
+
+            if in_attack in max_ijs:
+                max_ijs.remove(in_attack)
 
     min_sum = 1e+9
     min_sum_ijs = []
