@@ -191,8 +191,6 @@ N, M, K = map(int, input().split())
 area = [list(map(int, input().split())) for _ in range(N)]
 attacker_list = []
 
-if test_case != 4:
-    continue
 for k in range(K):
     if is_end(area) :
         break
