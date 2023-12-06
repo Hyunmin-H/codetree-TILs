@@ -175,8 +175,10 @@ def attack_laser2(i, j, d_i, d_j):
             if area[iii][jjj] == 0 :
                 continue
             if (iii, jjj) == (d_i, d_j):
-                # routes_final.append(route)
-                return route
+                global route_final
+                if len(route_final) == 0 or len(route_final) > len(route):
+                    route_final = route
+                # return route
                 break
 
             if not (iii, jjj) in route:
@@ -241,31 +243,39 @@ def get_energy(a_i, a_j, d_i, d_j, route):
 dy = [-1, 0, 1, 0]
 dx = [0, -1, 0, 1]
 
-N, M, K = map(int, input().split())
-area = [list(map(int, input().split())) for _ in range(N)]
-attacker_list = []
-attack_history = [[0 for _ in range(M)] for _ in range(N)]
-for k in range(K):
-    if is_end(area) :
-        break
-    a_i, a_j = select_attacker(area)
-    area[a_i][a_j] += N+M
+sys.stdin = open("/Users/hanhyunmin/PycharmProjects/pythonProject/포탑부수기/input.txt", "r")
+T = int(input())
 
-    d_i, d_j = select_defenser(area, a_i, a_j)
-    v = [[False for _ in range(M)] for _ in range(N)]
-    v[a_i][a_j] = True
-    # attack_laser(a_i, a_j, d_i, d_j, [], v)
-    route_final = attack_laser2(a_i, a_j, d_i, d_j)
-    if len(route_final) == 0 :
-        route_final = attack_poktan(a_i, a_j, d_i, d_j, area[a_i][a_j])
-    else :
-        route_final = route_final[1:]
+# 여러개의 테스트 케이스가 주어지므로, 각각을 처리합니다.
+for test_case in range(1, T + 1):
+    N, M, K = map(int, input().split())
+    area = [list(map(int, input().split())) for _ in range(N)]
+    attacker_list = []
+    attack_history = [[0 for _ in range(M)] for _ in range(N)]
+    if test_case != 7:
+        continue
+    for k in range(K):
+        if is_end(area) :
+            break
+        a_i, a_j = select_attacker(area)
+        area[a_i][a_j] += N+M
 
-        # route_final = choose_min_route(routes_final)
-        damage_route(route_final, area[a_i][a_j])
-    area[d_i][d_j] = max(0, area[d_i][d_j] - area[a_i][a_j])
-    get_energy(a_i, a_j, d_i, d_j,route_final)
+        d_i, d_j = select_defenser(area, a_i, a_j)
+        v = [[False for _ in range(M)] for _ in range(N)]
+        v[a_i][a_j] = True
+        route_final = []
+        # attack_laser(a_i, a_j, d_i, d_j, [], v)
+        attack_laser2(a_i, a_j, d_i, d_j)
+        if len(route_final) == 0 :
+            route_final = attack_poktan(a_i, a_j, d_i, d_j, area[a_i][a_j])
+        else :
+            route_final = route_final[1:]
 
-    append_attacker(a_i, a_j)
-    attack_history[a_i][a_j] = k+1
-print(get_strongest(area))
+            # route_final = choose_min_route(routes_final)
+            damage_route(route_final, area[a_i][a_j])
+        area[d_i][d_j] = max(0, area[d_i][d_j] - area[a_i][a_j])
+        get_energy(a_i, a_j, d_i, d_j,route_final)
+
+        append_attacker(a_i, a_j)
+        attack_history[a_i][a_j] = k+1
+    print(get_strongest(area))
