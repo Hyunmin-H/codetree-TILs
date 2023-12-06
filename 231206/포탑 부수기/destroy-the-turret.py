@@ -84,10 +84,15 @@ def select_defenser(area, a_i, a_j):
         if max_ijs[0] != attacker  :
             return max_ijs[0]
 
+    in_attacker= []
     for i in range(len(attacker_list)):
         if attacker_list[i] in max_ijs :
-            if attacker_list[i] != attacker  :
-                return attacker_list[i]
+            in_attacker.append(attacker_list[i])
+    if len(in_attacker) == len(max_ijs):
+        return in_attacker[0]
+    else :
+        for in_attack in in_attacker:
+            max_ijs.remove(in_attack)
 
     min_sum = 1e+9
     min_sum_ijs = []
@@ -144,7 +149,7 @@ def damage_route(route, damage):
         i, j = r
         area[i][j] -= damage//2
 
-def attack_poktan(d_i, d_j, damage):
+def attack_poktan(a_i, a_j, d_i, d_j, damage):
     dyy = [-1, -1, 0, 1, 1, 1, 0, -1]
     dxx = [0, 1, 1, 1, 0, -1, -1, -1]
     damage_area = []
@@ -152,9 +157,9 @@ def attack_poktan(d_i, d_j, damage):
         ii = (d_i + dyy[n]) % N
         jj = (d_j + dxx[n]) % M
 
-        if area[ii][jj] == 0 :
+        if area[ii][jj] == 0 or (ii == a_i and jj == a_j):
             continue
-        area[ii][jj] -= damage//2
+        area[ii][jj] = max(0, area[ii][jj]  - damage//2)
         damage_area.append((ii, jj))
     return damage_area
 
@@ -174,19 +179,19 @@ def get_energy(a_i, a_j, d_i, d_j, route):
 dy = [0, 1, 0, -1]
 dx = [1, 0, -1, 0]
 
+
+
 N, M, K = map(int, input().split())
 area = [list(map(int, input().split())) for _ in range(N)]
 attacker_list = []
 
 for k in range(K):
     if is_end(area) :
-        ## 가장 강한 공격력
         break
     a_i, a_j = select_attacker(area)
     area[a_i][a_j] += N+M
 
     d_i, d_j = select_defenser(area, a_i, a_j)
-    area[d_i][d_j] -= area[a_i][a_j]
 
     v = [[False for _ in range(M)] for _ in range(N)]
     v[a_i][a_j] = True
@@ -194,11 +199,12 @@ for k in range(K):
     attack_laser(a_i, a_j, d_i, d_j, [], v)
 
     if len(routes_final) == 0 :
-        route_final = attack_poktan(d_i, d_j, area[a_i][a_j])
+        route_final = attack_poktan(a_i, a_j, d_i, d_j, area[a_i][a_j])
     else :
         route_final = choose_min_route(routes_final)
         damage_route(route_final, area[a_i][a_j])
 
+    area[d_i][d_j] = max(0, area[d_i][d_j] - area[a_i][a_j])
     get_energy(a_i, a_j, d_i, d_j,route_final)
 
     attacker_list.append((a_i, a_j))
