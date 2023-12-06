@@ -106,6 +106,7 @@ def select_defenser(area, a_i, a_j):
     if len(old_ij) ==1 :
         return old_ij[0]
 
+
     #
     # in_attacker= []
     # in_attacker_set=set([])
@@ -126,7 +127,7 @@ def select_defenser(area, a_i, a_j):
 
     min_sum = 1e+9
     min_sum_ijs = []
-    for i, j in max_ijs :
+    for i, j in old_ij :
         if min_sum > i+j :
             min_sum = i+j
             min_sum_ijs = [(i, j)]
