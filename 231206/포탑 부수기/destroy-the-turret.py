@@ -183,7 +183,7 @@ def attack_laser2(i, j, d_i, d_j):
 
             # if not (iii, jjj) in route:
             if not v[iii][jjj]:
-                route_ = [r[:] for r in route]
+                route_ = route[:]
                 v_ = [vv[:] for vv in v]
                 v_[iii][jjj] = True
                 route_.append((iii, jjj))
