@@ -161,12 +161,12 @@ def attack_laser(i, j, d_i, d_j, route, v):
             v_ = [vv[:] for vv in v]
             route_ = [r[:] for r in route]
             attack_laser(ii, jj, d_i, d_j, route_, v_)
-
 def attack_laser2(i, j, d_i, d_j):
-    q = deque([(i, j, [(i, j)])])
-
+    v = [[False for _ in range(M)] for _ in range(N)]
+    v[i][j] = True
+    q = deque([(i, j,v, [(i, j)])])
     while q:
-        ii, jj, route = q.pop()
+        ii, jj, v, route = q.pop()
 
         for n in range(4):
             iii = (ii + dy[n]) % N
@@ -181,15 +181,14 @@ def attack_laser2(i, j, d_i, d_j):
                 # return route
                 break
 
-            if not (iii, jjj) in route:
-
+            # if not (iii, jjj) in route:
+            if not v[iii][jjj]:
                 route_ = [r[:] for r in route]
+                v_ = [vv[:] for vv in v]
+                v_[iii][jjj] = True
                 route_.append((iii, jjj))
-                q.append((iii, jjj, route_))
+                q.append((iii, jjj, v_, route_))
     return []
-    # print(routes_final)
-
-
 def choose_min_route(routes):
     min_value = 1e+9
     min_routes = []
