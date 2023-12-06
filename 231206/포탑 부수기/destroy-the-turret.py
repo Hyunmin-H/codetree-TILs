@@ -87,13 +87,10 @@ def select_defenser(area, a_i, a_j):
     in_attacker= []
     in_attacker_set=set([])
 
-    print('attacker_list', attacker_list)
     for i in range(len(attacker_list)):
         if attacker_list[i] in max_ijs :
             in_attacker.append(attacker_list[i])
             in_attacker_set.add(attacker_list[i])
-    print('in_attacker', in_attacker)
-    print('max_ijs', max_ijs)
     if len(in_attacker_set) == len(max_ijs):
         return in_attacker[0]
     else :
@@ -101,7 +98,6 @@ def select_defenser(area, a_i, a_j):
             if in_attack in max_ijs:
                 max_ijs.remove(in_attack)
 
-    print('after max_ijs', max_ijs)
     min_sum = 1e+9
     min_sum_ijs = []
     for i, j in max_ijs :
