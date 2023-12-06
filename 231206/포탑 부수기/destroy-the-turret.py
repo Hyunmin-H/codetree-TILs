@@ -158,7 +158,6 @@ def attack_laser2(i, j, d_i, d_j):
                 route_.append((iii, jjj))
                 q.append((iii, jjj, route_))
 
-    print(routes_final)
 
 
 def choose_min_route(routes):
