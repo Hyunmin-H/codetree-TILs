@@ -89,7 +89,7 @@ def select_defenser(area, a_i, a_j):
             if attacker_list[i] != attacker  :
                 return attacker_list[i]
 
-    min_sum = 0
+    min_sum = 1e+9
     min_sum_ijs = []
     for i, j in max_ijs :
         if min_sum > i+j :
@@ -101,7 +101,7 @@ def select_defenser(area, a_i, a_j):
         if min_sum_ijs[0] != attacker  :
             return min_sum_ijs[0]
 
-    min_j = 0
+    min_j = 1e+9
     min_j_ij = []
     for i, j in min_j_ij :
         if min_j > j :
