@@ -161,6 +161,7 @@ def attack_laser(i, j, d_i, d_j, route, v):
             v_ = [vv[:] for vv in v]
             route_ = [r[:] for r in route]
             attack_laser(ii, jj, d_i, d_j, route_, v_)
+
 def attack_laser2(i, j, d_i, d_j):
     v = [[False for _ in range(M)] for _ in range(N)]
     v[i][j] = True
@@ -175,10 +176,10 @@ def attack_laser2(i, j, d_i, d_j):
             if area[iii][jjj] == 0 :
                 continue
             if (iii, jjj) == (d_i, d_j):
-                global route_final
-                if len(route_final) == 0 or len(route_final) > len(route):
-                    route_final = route
-                # return route
+                # global route_final
+                # if len(route_final) == 0 or len(route_final) > len(route):
+                #     route_final = route
+                return route
                 break
 
             # if not (iii, jjj) in route:
@@ -189,6 +190,9 @@ def attack_laser2(i, j, d_i, d_j):
                 route_.append((iii, jjj))
                 q.append((iii, jjj, v_, route_))
     return []
+    # print(routes_final)
+
+
 def choose_min_route(routes):
     min_value = 1e+9
     min_routes = []
@@ -257,7 +261,7 @@ for k in range(K):
     v[a_i][a_j] = True
     route_final = []
     # attack_laser(a_i, a_j, d_i, d_j, [], v)
-    attack_laser2(a_i, a_j, d_i, d_j)
+    route_final = attack_laser2(a_i, a_j, d_i, d_j)
     if len(route_final) == 0 :
         route_final = attack_poktan(a_i, a_j, d_i, d_j, area[a_i][a_j])
     else :
