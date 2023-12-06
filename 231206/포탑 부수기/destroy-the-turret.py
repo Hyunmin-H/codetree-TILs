@@ -167,6 +167,11 @@ def attack_poktan(a_i, a_j, d_i, d_j, damage):
         damage_area.append((ii, jj))
     return damage_area
 
+def append_attacker(a_i, a_j):
+    if (a_i, a_j) in attacker_list:
+        attacker_list.remove((a_i, a_j))
+    attacker_list.append((a_i, a_j))
+
 def get_energy(a_i, a_j, d_i, d_j, route):
 
     for i in range(N):
@@ -194,7 +199,6 @@ for k in range(K):
     area[a_i][a_j] += N+M
 
     d_i, d_j = select_defenser(area, a_i, a_j)
-
     v = [[False for _ in range(M)] for _ in range(N)]
     v[a_i][a_j] = True
     routes_final = []
@@ -205,10 +209,8 @@ for k in range(K):
     else :
         route_final = choose_min_route(routes_final)
         damage_route(route_final, area[a_i][a_j])
-
     area[d_i][d_j] = max(0, area[d_i][d_j] - area[a_i][a_j])
     get_energy(a_i, a_j, d_i, d_j,route_final)
 
-    attacker_list.append((a_i, a_j))
-
+    append_attacker(a_i, a_j)
 print(get_strongest(area))
