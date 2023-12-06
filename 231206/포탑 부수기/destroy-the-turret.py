@@ -176,7 +176,7 @@ def attack_laser2(i, j, d_i, d_j):
             if area[iii][jjj] == 0 :
                 continue
             if (iii, jjj) == (d_i, d_j):
-                routes_final.append(route)
+                return route
                 break
 
             if not (iii, jjj) in route:
@@ -256,7 +256,7 @@ for k in range(K):
     v[a_i][a_j] = True
     routes_final = []
     # attack_laser(a_i, a_j, d_i, d_j, [], v)
-    attack_laser2(a_i, a_j, d_i, d_j)
+    routes_final.append(attack_laser2(a_i, a_j, d_i, d_j))
 
     if len(routes_final) == 0 :
         route_final = attack_poktan(a_i, a_j, d_i, d_j, area[a_i][a_j])
