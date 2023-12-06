@@ -41,9 +41,18 @@ def select_attacker(area):
     if len(min_ijs) == 1 :
         return min_ijs[0]
 
-    for i in range(len(attacker_list)-1, -1, -1):
-        if attacker_list[i] in min_ijs :
-            return attacker_list[i]
+    recent = 0
+    recent_ij = []
+
+    for i, j in min_ijs :
+        if attack_history[i][j] > 0 and recent < attack_history[i][j] :
+            recent = attack_history[i][j]
+            recent_ij = [(i, j)]
+    if len(recent_ij) > 0 :
+        return recent_ij[0]
+    # for i in range(len(attacker_list)-1, -1, -1):
+    #     if attacker_list[i] in min_ijs :
+    #         return attacker_list[i]
 
     max_sum = 0
     max_sum_ijs = []
@@ -84,19 +93,36 @@ def select_defenser(area, a_i, a_j):
         if max_ijs[0] != attacker  :
             return max_ijs[0]
 
-    in_attacker= []
-    in_attacker_set=set([])
 
-    for i in range(len(attacker_list)):
-        if attacker_list[i] in max_ijs :
-            in_attacker.append(attacker_list[i])
-            in_attacker_set.add(attacker_list[i])
-    if len(in_attacker_set) == len(max_ijs):
-        return in_attacker[0]
-    else :
-        for in_attack in in_attacker:
-            if in_attack in max_ijs:
-                max_ijs.remove(in_attack)
+    old = 1e+9
+    old_ij = []
+
+    for i, j in max_ijs :
+        if old > attack_history[i][j] :
+            old = attack_history[i][j]
+            old_ij = [(i, j)]
+        elif old == attack_history[i][j] :
+            old_ij.append((i, j))
+    if len(old_ij) ==1 :
+        return old_ij[0]
+
+    #
+    # in_attacker= []
+    # in_attacker_set=set([])
+    #
+    # print('attacker_list', attacker_list)
+    # for i in range(len(attacker_list)):
+    #     if attacker_list[i] in max_ijs :
+    #         in_attacker.append(attacker_list[i])
+    #         in_attacker_set.add(attacker_list[i])
+    # print('in_attacker', in_attacker)
+    # print('max_ijs', max_ijs)
+    # if len(in_attacker_set) == len(max_ijs):
+    #     return in_attacker[0]
+    # else :
+    #     for in_attack in in_attacker:
+    #         if in_attack in max_ijs:
+    #             max_ijs.remove(in_attack)
 
     min_sum = 1e+9
     min_sum_ijs = []
@@ -116,6 +142,7 @@ def select_defenser(area, a_i, a_j):
         if min_j > j :
             min_j = j
             min_j_ij = [(i, j)]
+    print('min_j_ij', min_j_ij)
     return min_j_ij[0]
 
 def attack_laser(i, j, d_i, d_j, route, v):
@@ -143,8 +170,8 @@ def attack_laser2(i, j, d_i, d_j):
         ii, jj, route = q.pop()
 
         for n in range(4):
-            iii = (ii + dy[n])%4
-            jjj = (jj + dx[n])%4
+            iii = (ii + dy[n]) % N
+            jjj = (jj + dx[n]) % M
 
             if area[iii][jjj] == 0 :
                 continue
@@ -158,6 +185,7 @@ def attack_laser2(i, j, d_i, d_j):
                 route_.append((iii, jjj))
                 q.append((iii, jjj, route_))
 
+    # print(routes_final)
 
 
 def choose_min_route(routes):
@@ -213,11 +241,10 @@ def get_energy(a_i, a_j, d_i, d_j, route):
 dy = [-1, 0, 1, 0]
 dx = [0, -1, 0, 1]
 
-
 N, M, K = map(int, input().split())
 area = [list(map(int, input().split())) for _ in range(N)]
 attacker_list = []
-
+attack_history = [[0 for _ in range(M)] for _ in range(N)]
 for k in range(K):
     if is_end(area) :
         break
@@ -240,4 +267,5 @@ for k in range(K):
     get_energy(a_i, a_j, d_i, d_j,route_final)
 
     append_attacker(a_i, a_j)
+    attack_history[a_i][a_j] = k+1
 print(get_strongest(area))
