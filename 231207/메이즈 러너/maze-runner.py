@@ -127,7 +127,7 @@ def rotate_square(lu, rb):
             else :
                 area[i + lui][j + luj] = temp_area[i][j]
 
-
+    del temp_area
 def rotate_miro(exit) :
 
     lu, rb = set_square(exit)
