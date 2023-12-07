@@ -8,41 +8,41 @@ def print_2d(a):
         print()
     print('=====')
 
-def find_people_and_exit():
-    people = []
+def find_exit():
     exit = ()
     for i in range(N):
         for j in range(N):
-            if area[i][j] >=11 :
-                people.append((i, j))
-            elif area[i][j] == -1 :
+            if area[i][j] == -1 :
                 exit = (i, j)
-    return people, exit
+    return exit
 
 def move_people():
     global final_move_length
-    people, exit = find_people_and_exit()
+    exit = find_exit()
     ei, ej = exit
-    for p in people :
-        pi, pj = p
-        pii, pjj = p
-        if pi > ei :
-            pii = pi -1
-        elif pi < ei :
-            pii = pi +1
-        elif pj > ej :
-            pjj = pj -1
-        elif pj < ej :
-            pjj = pj + 1
+    area_ = [a[:] for a in area]
+    for i in range(N):
+        for j in range(N):
+            if area_[i][j] >= 11 :
+                pi, pj = (i, j)
+                pii, pjj = (i, j)
+                if pi > ei :
+                    pii = pi -1
+                elif pi < ei :
+                    pii = pi +1
+                elif pj > ej :
+                    pjj = pj -1
+                elif pj < ej :
+                    pjj = pj + 1
 
-        if pii < 0 or pjj < 0 or pii >=N or pjj >=N or 0 < area[pii][pjj] < 10 :
-            continue
-        final_move_length += area[pi][pj] - 10
-        if area[pii][pjj] == -1 :
-            area[pi][pj] = 0
-        else :
-            area[pii][pjj] = area[pi][pj]
-            area[pi][pj] = 0
+                if pii < 0 or pjj < 0 or pii >=N or pjj >=N or 0 < area[pii][pjj] < 10 :
+                    continue
+                final_move_length += area[pi][pj] - 10
+                if area[pii][pjj] == -1 :
+                    area[pi][pj] = 0
+                else :
+                    area[pii][pjj] = area[pi][pj]
+                    area[pi][pj] = 0
     return exit
 
 def set_square(exit):
@@ -107,8 +107,6 @@ def rotate_matrix(a):
         for j in range(length):
             a_[j][length-1-i] = a[i][j]
     return a_
-
-
 def rotate_square(lu, rb):
     import copy
     lui, luj = lu
@@ -120,8 +118,6 @@ def rotate_square(lu, rb):
         for j in range(length):
             temp_area[j][length-1-i] = area[lui+i][luj+j]
 
-
-
     # rotated_area = rotate_matrix(temp_area)
 
     for i in range(len(temp_area)) :
@@ -130,7 +126,6 @@ def rotate_square(lu, rb):
                 area[i+lui][j+luj] = temp_area[i][j] -1
             else :
                 area[i + lui][j + luj] = temp_area[i][j]
-
 
 
 def rotate_miro(exit) :
@@ -158,5 +153,5 @@ for k in range(K):
     rotate_miro(exit)
 
 print(final_move_length)
-_, exit = find_people_and_exit()
+exit = find_exit()
 print(exit[0]+1, exit[1]+1)
