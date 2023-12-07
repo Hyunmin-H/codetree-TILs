@@ -43,6 +43,7 @@ def move_people():
                 else :
                     area[pii][pjj] = area[pi][pj]
                     area[pi][pj] = 0
+    del area_
     return exit
 
 def set_square(exit):
