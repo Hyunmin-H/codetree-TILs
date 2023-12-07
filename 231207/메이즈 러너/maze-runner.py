@@ -139,12 +139,11 @@ dy = [-1, 0, 1, 0]
 dx = [0, -1, 0, 1]
 N, M , K = map(int, input().split())
 area = [list(map(int, input().split())) for _ in range(N)]
-persons = [list(map(int, input().split())) for _ in range(M)]
+for _ in range(M) :
+    i, j = map(int, input().split())
+    area[i-1][j-1] = 11
 exit = list(map(int, input().split()))
 final_move_length = 0
-for p in persons :
-    i, j = p
-    area[i-1][j-1] = 11
 area[exit[0]-1][exit[1]-1] = -1
 
 for k in range(K):
