@@ -114,13 +114,23 @@ def rotate_square(lu, rb):
     lui, luj = lu
     rbi, rbj = rb
     temp_area = [a[luj:rbj+1] for a in area[lui:rbi+1]]
-    rotated_area = rotate_matrix(temp_area)
-    for i in range(len(rotated_area)) :
-        for j in range(len(rotated_area)) :
-            if 0 < rotated_area[i][j] <10 :
-                area[i+lui][j+luj] = rotated_area[i][j] -1
+
+    length = len(temp_area)
+    for i in range(length):
+        for j in range(length):
+            temp_area[j][length-1-i] = area[lui+i][luj+j]
+
+
+
+    # rotated_area = rotate_matrix(temp_area)
+
+    for i in range(len(temp_area)) :
+        for j in range(len(temp_area)) :
+            if 0 < temp_area[i][j] <10 :
+                area[i+lui][j+luj] = temp_area[i][j] -1
             else :
-                area[i + lui][j + luj] = rotated_area[i][j]
+                area[i + lui][j + luj] = temp_area[i][j]
+
 
 
 def rotate_miro(exit) :
