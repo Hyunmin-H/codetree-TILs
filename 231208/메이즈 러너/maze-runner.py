@@ -8,13 +8,19 @@ def print_2d(a):
         print()
     print('=====')
 
+def print_2d2(a, b):
+    for i, j in zip(a, b):
+        for ii, jj in zip(i, j):
+            print(ii+ 10*jj, end=' ')
+        print()
+    print('=====')
 def find_people_and_exit():
     exit = ()
     people = []
     for i in range(N):
         for j in range(N):
-            if area[i][j] >=11 :
-                people.append((i, j, area[i][j]-10))
+            if area_p[i][j] > 0 :
+                people.append([i, j, area_p[i][j]])
             if area[i][j] == -1 :
                 exit = (i, j)
     return people, exit
@@ -22,7 +28,9 @@ def find_people_and_exit():
 def move_people(people, exit):
     global final_move_length
     ei, ej = exit
-    for p in people :
+    p_after = people[:]
+
+    for n, p in enumerate(people) :
         is_move = False
         is_skip = False
         pi, pj, n_p = p
@@ -37,18 +45,24 @@ def move_people(people, exit):
         if not is_skip :
             # if not (pii < 0 or pjj < 0 or pii >=N or pjj >=N or 0 < area[pii][pjj] < 10) :
             if  pii >= 0 and pjj >= 0 and pii < N and pjj < N:
+
                 if area[pii][pjj] == -1 : ## 출구일 때
-                    area[pi][pj] = 0
+                    p_after[n][0] = -1
+                    p_after[n][1] = -1
                     final_move_length += n_p
                     continue
-                elif area[pii][pjj] > 10: ## 사람이 있을 때
-                    area[pii][pjj] += n_p
-                    area[pi][pj] = 0
+                elif area_p[pii][pjj] > 0: ## 사람이 있을 때
+                    p_after[n][0] = pii
+                    p_after[n][1] = pjj
+                    # area[pii][pjj] += n_p
+                    # area[pi][pj] = 0
                     final_move_length += n_p
                     continue
-                elif area[pii][pjj] == 0: ## 아무도 없을 때
-                    area[pii][pjj] = 10+n_p
-                    area[pi][pj] = 0
+                elif area[pii][pjj] == 0 and area_p[pii][pjj] == 0: ## 아무도 없을 때
+                    p_after[n][0] = pii
+                    p_after[n][1] = pjj
+                    # area[pii][pjj] = 10+n_p
+                    # area[pi][pj] = 0
                     final_move_length += n_p
 
                     continue
@@ -66,15 +80,29 @@ def move_people(people, exit):
             continue
         final_move_length += n_p
         if area[pii][pjj] == -1 : ## 출구일 때
-            area[pi][pj] = 0
-        elif area[pii][pjj] > 10: ## 사람이 있을 때
-            area[pii][pjj] += n_p
-            area[pi][pj] = 0
-        elif area[pii][pjj] == 0: ## 아무도 없을 때
-            area[pii][pjj] = 10+n_p
-            area[pi][pj] = 0
+            p_after[n][0] = -1
+            p_after[n][1] = -1
+            # area[pi][pj] = 0
+        elif area_p[pii][pjj] > 0: ## 사람이 있을 때
+            p_after[n][0] = pii
+            p_after[n][1] = pjj
+            # area[pii][pjj] += n_p
+            # area[pi][pj] = 0
+        elif area[pii][pjj] == 0 and area_p[pii][pjj] == 0: ## 아무도 없을 때
+            p_after[n][0] = pii
+            p_after[n][1] = pjj
+            # area[pii][pjj] = 10+n_p
+            # area[pi][pj] = 0
+    area_p_after = [[0 for _ in range(N)] for _ in range(N)]
+    for p in p_after:
+        i, j, np = p
+        if i == -1 and j == -1 :
+            continue
+        area_p_after[i][j] += np
 
 
+
+    return area_p_after
 
 def set_square(exit):
     ei, ej = exit
@@ -140,7 +168,7 @@ def set_square2(exit):
                 is_person = False
                 for ii in range(n):
                     for jj in range(n):
-                        if area[i+ii][j+jj] > 10:
+                        if area_p[i+ii][j+jj] > 0:
                             is_person = True
                         elif area[i+ii][j+jj] == -1 :
                             is_exit = True
@@ -167,6 +195,7 @@ def rotate_square(lu, rb):
     lui, luj = lu
     rbi, rbj = rb
     temp_area = [a[luj:rbj+1] for a in area[lui:rbi+1]]
+    temp_area_p = [a[luj:rbj+1] for a in area_p[lui:rbi+1]]
 
     # length = len(temp_area)
     # for i in range(length):
@@ -174,13 +203,15 @@ def rotate_square(lu, rb):
     #         temp_area[j][length-1-i] = area[lui+i][luj+j]
 
     temp_area = rotate_matrix(temp_area)
+    temp_area_p = rotate_matrix(temp_area_p)
 
     for i in range(len(temp_area)) :
         for j in range(len(temp_area)) :
             if 0 < temp_area[i][j] < 10 :
                 area[i+lui][j+luj] = temp_area[i][j] -1
             else :
-                area[i + lui][j + luj] = temp_area[i][j]
+                area[i+lui][j+luj] = temp_area[i][j]
+            area_p[i + lui][j + luj] = temp_area_p[i][j]
     del temp_area
 
 def rotate_miro(exit) :
@@ -194,10 +225,12 @@ dy = [-1, 0, 1, 0]
 dx = [0, -1, 0, 1]
 N, M , K = map(int, input().split())
 area = [list(map(int, input().split())) for _ in range(N)]
+area_p = [[0 for _ in range(N)] for _ in range(N)]
 for _ in range(M) :
     i, j = map(int, input().split())
-    area[i-1][j-1] = 11
+    area_p[i-1][j-1] += 1
 exit = list(map(int, input().split()))
+
 
 final_move_length = 0
 area[exit[0]-1][exit[1]-1] = -1
@@ -206,7 +239,7 @@ for k in range(K):
     people, exit = find_people_and_exit()
     if len(people) == 0:
         break
-    move_people(people, exit)
+    area_p = move_people(people, exit)
     people, exit = find_people_and_exit()
     if len(people) == 0:
         break
