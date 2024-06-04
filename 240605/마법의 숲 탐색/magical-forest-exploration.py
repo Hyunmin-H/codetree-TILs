@@ -15,13 +15,13 @@ def check_and_move(r, c, exit):
     elif r+2 < R and board[r+2][c]==0 and board[r+1][c-1]==0 and board[r+1][c+1]==0 :
         r +=1
     else :
-        if 2 <= c < C  and board[r][c-2] == 0 and board[r-1][c-1] == 0 and board[r+1][c-1]==0 \
+        if 2 <= c < C  and (r < 0 or board[r][c-2] == 0) and (r-1 <0 or board[r-1][c-1] == 0) and board[r+1][c-1]==0 \
             and r + 2 < R and board[r + 2][c-1] == 0 and board[r + 1][c - 2] == 0 :
                 c -= 1
                 exit = (exit-1)%4
                 r += 1
         else :
-            if 0< c < C-2  and board[r][c + 2] == 0 and board[r - 1][c + 1] == 0 and board[r + 1][c + 1] == 0\
+            if 0< c < C-2  and (r < 0 or board[r][c + 2] == 0) and (r-1 <0 or board[r - 1][c + 1] == 0) and board[r + 1][c + 1] == 0\
                 and r + 2 < R and board[r + 2][c+1] == 0 and board[r + 1][c+2] == 0 :
                     r += 1
                     c += 1
@@ -37,7 +37,7 @@ def move_gorium(c, exit, k):
         is_move, r, c, exit = check_and_move(r, c, exit)
         if not is_move :
             break
-    if r <= 0 :
+    if r < 0 :
         board = [[0 for _ in range(C)] for _ in range(R)]
     else :
         board[r][c] = k
