@@ -37,7 +37,7 @@ def move_gorium(c, exit, k):
         is_move, r, c, exit = check_and_move(r, c, exit)
         if not is_move :
             break
-    if r < 0 :
+    if r <= 0 :
         board = [[0 for _ in range(C)] for _ in range(R)]
     else :
         board[r][c] = k
