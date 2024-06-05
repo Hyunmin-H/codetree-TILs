@@ -63,8 +63,8 @@ def find_optim_remains():
     max_value = 0
     max_queue = deque([])
     for d in range(1, 4):
-        for i in range(3):
-            for j in range(3):
+        for j in range(3):
+            for i in range(3):
                 new_board = rotate(board, d, i, j)
                 value = obtain_remains(new_board)
                 if value == max_value :
