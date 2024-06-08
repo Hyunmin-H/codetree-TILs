@@ -88,7 +88,7 @@ def get_order_person(i, j, dirs):
             order += 1
             if q_status_list[m][index] == 1 :
                 break
-            index = (index+1) % N
+            index = (index+1) %len(q_status_list[m])
 
     return order, m
 
