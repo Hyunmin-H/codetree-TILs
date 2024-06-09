@@ -9,12 +9,12 @@ def print_2d(a):
         print()
     print('===')
 def have_to_escape(i, j, r, c):
-    if abs(i-r) + abs(j-c)  <=3 :
+    if abs(i-r) + abs(j-c)  <= 3 :
         return True
     else :
         return False
 def move_escapers(escapers):
-    new_escapers = [[deque() for _ in range(N)]for _ in range(N)]
+    new_escapers = [[deque() for _ in range(N)] for _ in range(N)]
 
     for i in range(N):
         for j in range(N):
@@ -30,10 +30,16 @@ def move_escapers(escapers):
                         jj = j + dx[d]
                         if not (follower[0] == ii and follower[1] == jj) :
                             new_escapers[ii][jj].append(d)
+                        else :
+                            new_escapers[i][j].append(d)
 
                     else :
                         if not (follower[0] == ii and follower[1] == jj) :
                             new_escapers[ii][jj].append(d)
+                        else :
+                            new_escapers[i][j].append(d)
+            else :
+                new_escapers[i][j].extend(escapers[i][j])
     return new_escapers
 
 def move_follower(dists, dirs, remain_dist):
@@ -44,7 +50,7 @@ def move_follower(dists, dirs, remain_dist):
 
     follower[0], follower[1] = ii, jj
 
-    remain_dist -=1
+    remain_dist -= 1
 
     if remain_dist == 0 :
         if len(dists) != 0 :
@@ -54,9 +60,15 @@ def move_follower(dists, dirs, remain_dist):
             if ii == 0 and jj == 0 :
                 dists = copy.deepcopy(standard_dists_reverse)
                 dirs = copy.deepcopy(standard_dirs_reverse)
+
+                remain_dist = dists.popleft()
+                follower[2] = dirs.popleft()
             elif ii == N//2 and jj == N//2 :
                 dists = copy.deepcopy(standard_dists)
                 dirs = copy.deepcopy(standard_dirs)
+
+                remain_dist = dists.popleft()
+                follower[2] = dirs.popleft()
 
     return follower, remain_dist, dists, dirs
 
@@ -66,14 +78,14 @@ def catch_escapers(k, escapers):
     i, j, d = follower
     for dist in range(3):
         ii = i + dy[d] * dist
-        jj = j + dx[d]* dist
+        jj = j + dx[d] * dist
 
         if ii < 0 or jj < 0 or ii >=N or jj >=N :
             continue
         if trees[ii][jj] :
             continue
 
-        answer += k*len(escapers[ii][jj])
+        answer += k * len(escapers[ii][jj])
         escapers[ii][jj] = deque()
 
     return escapers
@@ -106,13 +118,13 @@ dists.append(i)
 
 for i in range(2*N-1):
     dirs.append(i % 4)
+
 standard_dists = copy.deepcopy(dists)
 standard_dirs = copy.deepcopy(dirs)
 standard_dists_reverse = deque(reversed(standard_dists))
 standard_dirs_reverse = deque((d+2) % 4 for d in list(reversed(standard_dirs)))
 remain_dist = dists.popleft()
 dirs.popleft()
-
 
 for k in range(1,K+1):
     escapers = move_escapers(escapers)
