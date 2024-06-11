@@ -84,7 +84,7 @@ def move_packman(packman, board_monsters, deads):
         jj = jj + dx[d*2]
 
         for _ in range(len(board_monsters[ii][jj])):
-            deads[ii][jj].append(2)
+            deads[ii][jj].append(3)
         board_monsters[ii][jj] = deque()
 
     packman = [ii, jj]
