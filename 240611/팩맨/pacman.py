@@ -78,6 +78,8 @@ def move_packman(packman, board_monsters, deads):
         temp[ii1][jj1] = temp_mon[0]
 
 
+    if max_eat == 0 : 
+        max_dirs = [0, 0, 0]
     ii, jj = i, j
     for d in max_dirs :
         ii = ii + dy[d*2]
